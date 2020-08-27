@@ -27,7 +27,7 @@
         <div class="modal-dialog">
             <div class="modal-content">    
                 <div class="modal-body">
-                    <form method="post" action="add_record.php" id = "addNewForm">
+                    <form method="post" action="add_records.php" id = "addNewForm">
                     <fieldset>
                       <div class="row">
                       <div class="col-lg-6"><label id="label" for="tool_name"> Tool Name </label></div>
@@ -85,6 +85,27 @@
             </div>
         </div>
     </div>
-   
+
+    <table id="tracker-table">
+      <thead>
+          <tr>
+              <th>ID</th>
+              <th>Requested By</th>
+              <th>Tool Name</th>
+              <th>Type</th>
+              <th>Description</th>
+              <th>Priority</th>
+              <th>Tester</th>
+              <th>Date Filled</th>
+              <th>Date Closed</th>
+              <th>Fix Confirmed</th>
+              <th>Image Name</th>
+              <th>Status</th>
+          </tr>
+      </thead>
+      <tbody>
+      </tbody>
+  </table>
+
   </body>
 </html>
