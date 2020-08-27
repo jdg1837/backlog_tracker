@@ -17,8 +17,8 @@ $(document).ready(function() {
                 "defaultContent": `<div class="dropdown">
                 <button class="btn btn-primary btn-xs dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">...</button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item" id = editlink" href="#">Edit</a>
-                <a class="dropdown-item" id = "deletelink" href="#">Delete</a>
+                <a class="dropdown-item" id="editlink"" href="#">Edit</a>
+                <a class="dropdown-item" id="deletelink" href="#">Delete</a>
                 <div>
               </div>`
             } ]
@@ -43,19 +43,73 @@ $(document).ready(function() {
         });
       });
 
-    //   $('#trackertable tbody').on( 'click', 'button', function () {
-    //     //alert(555);
-    //     var table = $('#trackertable').DataTable();
-    //     var data = table.row( $(this).parents('tr') ).data();
-        
-    // } );
+    // Supercedes form submittal to send it to server with AJAX
+    $("#editOldForm").submit(function(e) {
 
-    // Action upon chosing to delete a row
-    $("#trackertable").on('click', '#deletelink', function(e){
+        e.preventDefault();
+    
+        $.ajax({
+            type: "POST",
+            url: $(this).attr('action'),
+            data: $(this).serialize(), // serializes the form's elements.
+            success: function(data)
+            {
+                $('#editOldModal').modal('hide');
+                $('#editOldForm').trigger("reset");
+                read_db();
+            }
+        });
+        });
+
+    // Action upon chosing to update a row: open modal prefilled with current values
+    $("#trackertable").on('click', '#editlink', function(e){
+
         e.stopPropagation();
         e.stopImmediatePropagation();
+
         var table = $('#trackertable').DataTable();
-        var data = table.row( $(this).parents('tr') ).data();
-        alert(data[1]);
+        var row_data = table.row( $(this).parents('tr') ).data();
+
+        var id = row_data[1];
+        var tool_name = row_data[3];
+        var type = row_data[4];
+        var description = row_data[5];
+        var priority = row_data[6];
+        var tester = row_data[7];
+        var image_name = row_data[11];
+        var status = row_data[12];
+
+        $('#id2').val(id);
+        $('#tool_name2').val(tool_name);
+        $('#type2').val(type);
+        $('#description2').val(description);
+        $('#priority2').val(priority);
+        $('#tester2').val(tester);
+        $('#image_name2').val(image_name);
+        $('#status2').val(status);
+
+        $('#editOldModal').modal('show');
+    });
+
+    // Action upon chosing to delete a row: order server to delete entry with that id
+    $("#trackertable").on('click', '#deletelink', function(e){
+
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+
+        var table = $('#trackertable').DataTable();
+        var row_data = table.row( $(this).parents('tr') ).data();
+
+        var id = row_data[1];
+
+        $.ajax({
+            type: "POST",
+            url: "delete_records.php",
+            data: {id: id},
+            success: function(data)
+            {
+                read_db();
+            }
+        });
     });
 } );

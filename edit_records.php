@@ -3,6 +3,7 @@
 if($_POST)
 {
     // Get input values
+    $id = $_POST['id'];
     $tool_name = $_POST['tool_name'];
     $type = $_POST['type'];
     $description = $_POST['description'];
@@ -10,8 +11,7 @@ if($_POST)
     $tester = $_POST['tester'];
     $image_name = $_POST['image_name'];
     $status = $_POST['status'];
-    $requestor_id = "John Doe";
-
+    
     // Databse metadata
     $host = "localhost";
     $dbusername = "root";
@@ -21,14 +21,21 @@ if($_POST)
     // Create connection
     $conn = new PDO('mysql:host='.$host.';dbname='.$dbname, 
                     $dbusername, $dbpassword);
-
+                    
     // Check connection
     if(!$conn) {
         die("Connection failed");
     }
     else {
-        $query = "INSERT INTO back_log (requestor_id, tool_name, type, description, priority, tester, image_name, status, date_filed)
-                    values ('$requestor_id','$tool_name','$type', '$description', '$priority', '$tester', '$image_name', '$status', NOW())";
+        $query =   "UPDATE back_log
+                    SET tool_name = '$tool_name',
+                        type = '$type',
+                        description = '$description',
+                        priority = '$priority',
+                        tester = '$tester',
+                        image_name = '$image_name',
+                        status = '$status'
+                    WHERE id = $id";
 
         if (!$conn->query($query)){
             echo "Error: ". $conn->errorInfo()[0];

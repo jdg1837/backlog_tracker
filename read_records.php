@@ -1,12 +1,9 @@
 <?php
-
-
-
-header('Set-Cookie: cross-site-cookie=name; SameSite=None; Secure');
+    header('Set-Cookie: cross-site-cookie=name; SameSite=None; Secure');
     $table = 'back_log';
 
     $primaryKey = 'id';
-    $button = "echo \"<button>Click!</button>\"";
+
     $columns = array(
         array( '',     'dt' => 0 ),
         array( 'db' => 'id', 'dt' => 1 ),
