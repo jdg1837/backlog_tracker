@@ -34,6 +34,12 @@ if($_POST)
                         priority = '$priority',
                         tester = '$tester',
                         image_name = '$image_name',
+                        date_closed = 
+                        ( CASE  
+                            WHEN (status != 'Closed') AND ('$status') = 'Closed' THEN NOW()
+                            WHEN (status = 'Closed') AND ('$status') != 'Closed' THEN NULL 
+                            ELSE  (date_closed)
+                        END ),
                         status = '$status'
                     WHERE id = $id";
 
