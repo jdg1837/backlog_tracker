@@ -27,12 +27,12 @@
         <div class="modal-dialog">
             <div class="modal-content">    
                 <div class="modal-body">
-                    <form method="post" action="add_records.php" id = "addNewForm">
+                  <form method="post" action="add_records.php" id = "addNewForm">
                     <fieldset>
                       <div class="row">
-                      <div class="col-lg-6"><label id="label" for="tool_name"> Tool Name </label></div>
+                      <label id="label" for="tool_name"> Tool Name </label></div>
                        </br>
-                      </div>
+
                       <select name="tool_name" size="3">
                       <option value="Test" selected>Test</option>
                       <option value="Budget">Budget</option>
@@ -60,11 +60,11 @@
                       </br>
           
                       <label id="label" for="tester"> Tester </label> </br>
-                      <input type="text" name="tester">
+                      <input type="text" name="tester" value="tester">
                       </br>
                       
                       <label id="label" for="image_name"> Image Name </label> </br>
-                      <input type="text" name="image_name">
+                      <input type="text" name="image_name" value="">
                       </br>
           
                       <label id="label" for="status"> Status </label> </br>
@@ -86,7 +86,7 @@
         </div>
     </div>
 
-    <table id="tracker-table">
+    <table id="tracker-table" class="table table-striped">
       <thead>
           <tr>
               <th>ID</th>
