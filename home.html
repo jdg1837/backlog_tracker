@@ -17,7 +17,7 @@
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script>   
     <script src="webapp.js"></script>
 
-    <h1>Backlog Tracker!</h1>
+    <h1>Backlog Tracker</h1>
     <h6>You are currently logged in as "<span id="username"></span>". Click <a id="userlink" href="#">here</a> to change users</h6> 
     </br>
 
@@ -32,8 +32,8 @@
                 </form>
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-secondary btn-lg" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary btn-lg" id="submitUser">Log-In</button>
+                <button type="button" class="btn btn-secondary btn-lg button_main" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary btn-lg button_main" id="submitUser">Log-In</button>
               </div>
           </div>
       </div>
@@ -42,12 +42,13 @@
     <!-- Header with search, entry-per-page and new entry controllers -->
     <div class="container-fluid">
       <div class="row no-gutters">
-      <div class="col-md-2" id="searchBar"></div>
-      <div class="col-md-2" id="showEntries"></div>
-      <div class="col-md-2"><button type="button" class="btn btn-primary btn-lg" id="addNewModal">Add New</button></div>  
+      <div class="col-2" id="searchBar" ></div>
+      <div class="col-2" id="showEntries"></div>
+      <div class="col-2"><button type="button" class="btn btn-primary btn-xs button_main" id="addNewModal">Add New</button></div>  
       </div>
       </div>
     </div>
+    </br>
 
     <!-- Pop-up Form to Add New Entry-->
     <div id="formModal" class="modal fade" role="dialog">
@@ -117,8 +118,8 @@
                   </br>
                 </div>
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary btn-lg" data-dismiss="modal">Close</button>
-                  <button type="button" class="btn btn-primary btn-lg" id="submitForm">Submit</button>
+                  <button type="button" class="btn btn-secondary btn-lg button_main" data-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-primary btn-lg button_main" id="submitForm">Submit</button>
                 </div>
             </div>
         </div>
@@ -133,8 +134,8 @@
                 <input name="deleteid" id="deleteid" type="hidden" value="">
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-secondary btn-lg" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary btn-lg" id="confirmDelete">Delete</button>
+                <button type="button" class="btn btn-secondary btn-lg button_main" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary btn-lg button_main" id="confirmDelete">Delete</button>
               </div>
           </div>
       </div>
