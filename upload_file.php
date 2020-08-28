@@ -16,3 +16,7 @@ if( in_array(strtolower($extension),$valid_extensions) )
         echo 0;
     }
 }
+else
+{
+    echo 0;
+}

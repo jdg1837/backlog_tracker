@@ -1,22 +1,43 @@
 $(document).ready(function() {
-    // We load the table whenever the page is loaded
+    // We load the table whenever the page is loaded, and set user to John Doe
     $('#username').text("John Doe");
     read_db();
-    initialize_up_widget();
 
-    function initialize_up_widget(){
-        var image_loader = $('#fileupload'); //file input 
-        //initialize blueimp fileupload plugin
-        image_loader.fileupload({
-            url: 'upload_file.php',
-            dataType: 'json',
-            autoUpload: false,
-            acceptFileTypes: /(\.|\/)(jpg|jpeg|png)$/i,
-            // maxFileSize: 1048576, //1MB
-            dropZone: $('#dropzone')
-        });
+    // Drag over upload area
+    $('.uploadbox').on('dragover', function (e) {
+        e.stopPropagation();
+        e.preventDefault();
+    });
+
+    // Drop image on upload area
+    $('.uploadbox').on('drop', function (e) {
+        e.stopPropagation();
+        e.preventDefault();
+        var file_form = $('#file');
+        var file_in = e.originalEvent.dataTransfer.files;
+        file_form[0].files = file_in;
+        update_image_name()
+    });
+
+    // Open file selector when clicking link to chose an image
+    $("#uploadlink").click(function(){
+        $('#file').click();
+    });
+
+    // Update name box whenever a new image is added
+    $('#file').on('change', function(){
+        update_image_name()
+    });
+
+    // Fill name box
+    function update_image_name(){
+        var file = $('#file');
+        if(file){
+            var file1 = file[0].files[0];
+            $('#image_name').val(file1['name']);
+        }
     }
-    
+
     // Reads from db and fills table. Adds button with dropdown options to update and delete
     function read_db(){
         $('#trackertable').DataTable( {
@@ -65,9 +86,9 @@ $(document).ready(function() {
                 success: function(response){
                     if(response != 0){
                         $('#image_name').val(filename);
-                        update_db();
                     }
-                },
+                    update_db();
+                }
             });
         }
         else{

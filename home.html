@@ -13,20 +13,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script>
-    <script src="file-upload/js/vendor/jquery.ui.widget.js"></script>
-    <script src="file-upload/js/jquery.iframe-transport.js"></script>
-    <script src="file-upload/js/jquery.fileupload.js"></script>    
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script>   
     <script src="webapp.js"></script>
-
-    <div class="container" >
-      <input type="file" name="file" id="file">
-      
-      <!-- Drag and Drop container-->
-      <div class="upload-area"  id="uploadfile">
-          <h1>Drag and Drop file here<br/>Or<br/>Click to select file</h1>
-      </div>
-  </div>
 
     <h1>Backlog Tracker!</h1>
     <h6>You are currently logged in as "<span id="username"></span>". Click <a id="userlink" href="#">here</a> to change users</h6> 
@@ -49,7 +37,6 @@
       </div>
     </div>
 
-
     <!-- Button to trigger the modal to add entry -->
     <button type="button" class="btn btn-primary btn-lg" id="addNewModal">Add New</button>
 
@@ -58,10 +45,12 @@
         <div class="modal-dialog">
             <div class="modal-content">    
                 <div class="modal-body">
+                  
                   <form method="post" action="add_records.php" id = "entryForm">
                       <input name="id" id="id" type="hidden" value="">
                       <input name="formType" id="formType" type="hidden" value="entry">
                       <input name="requested_by" id="requested_by" type="hidden" value="John Doe">
+                      <input name="fix_confirmed" id="fix_confirmed" type="hidden" value="No">
 
                       <label id="label" for="tool_name"> Tool Name </label> </br>
                       <select name="tool_name" size="1" id="tool_name">
@@ -93,8 +82,15 @@
                       <input type="text" name="tester" value="tester" id="tester">
                       </br>
                       
-                      <input name="image_name" id="image_name" type="hidden" value="" id="image_name">
-                      
+                      <div class="uploadbox"  id="uploadbox">
+                      <input type="file" name="file" id="file" accept="image/*" hidden>
+                      <label> Image Name </label> </br>
+                      <input type="text" name="image_name" id="image_name" value="" id="image_name" readonly> </br>
+                      <span><a id="uploadlink" href="#">Choose and image to upload</a> or drag it here</span>
+                      </div>
+
+
+
                       <label id="label" for="status"> Status </label> </br>
                       <select name="status" size="1" id="status">
                       <option value="New" selected>New</option>
@@ -105,9 +101,6 @@
                       </br>
                   </form>
                   </br>
-                  <form method="post" action="upload_file.php" enctype="multipart/form-data" id="imageForm">
-                      <input type="file" name="file" id="file">
-                  </form>
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary btn-lg" data-dismiss="modal">Close</button>
@@ -117,6 +110,7 @@
         </div>
     </div>
 
+    <!-- Modal to confirm entry deletion -->
     <div id="deleteModal" class="modal fade" role="dialog">
       <div class="modal-dialog">
           <div class="modal-content">    
@@ -131,72 +125,6 @@
           </div>
       </div>
     </div>
-
-
-    <!-- Pop-up Form to Edit Existing Entry-->
-    <div id="editOldModal" class="modal fade" role="dialog">
-      <div class="modal-dialog">
-          <div class="modal-content">    
-              <div class="modal-body">
-                <form method="post" action="edit_records.php" id = "editOldForm">
-                  <fieldset>
-                    <input name="id" id="id2" type="hidden" value="">
-
-                    <label id="label" for="tool_name"> Tool Name </label>
-                    </br>
-
-                    <select name="tool_name" size="1" id="tool_name2">
-                    <option value="Test">Test</option>
-                    <option value="Budget">Budget</option>
-                    <option value="Project">Project</option>
-                    </select>
-                    </br>
-        
-                    <label id="label" for="type"> Type </label> </br>
-                    <select name="type" size="1" id="type2">
-                    <option value="Enhancement">Enhancement</option>
-                    </select>
-                    </br>
-        
-                    <label id="label" for="description"> Description </label> </br>
-                    <textarea name="description" style="width:200px; height:100px;" maxlength="500" id="description2"></textarea>
-                    </br>
-        
-                    <label id="label" for="priority"> Priority </label> </br>
-                    <select name="priority" size="1" id="priority2">
-                    <option value="Low">Low</option>
-                    <option value="Medium">Medium</option>
-                    <option value="High">High</option>
-                    </select>
-                    </br>
-        
-                    <label id="label" for="tester"> Tester </label> </br>
-                    <input type="text" name="tester" id="tester2">
-                    </br>
-                    
-                    <label id="label" for="image_name"> Image Name </label> </br>
-                    <input type="text" name="image_name" id="image_name2">
-                    </br>
-        
-                    <label id="label" for="status"> Status </label> </br>
-                    <select name="status" size="1" id="status2">
-                    <option value="New">New</option>
-                    <option value="In-Progress">In-Progress</option>
-                    <option value="Completed">Completed</option>
-                    <option value="Closed">Closed</option>
-                    </select>
-                    </br>
- 
-                  </fieldset>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <input type="submit" name="submit">
-                </form>
-              </div>
-          </div>
-      </div>
-  </div>
 
     <!-- Table of backlog entries -->
     <table id="trackertable" class="table table-striped">
