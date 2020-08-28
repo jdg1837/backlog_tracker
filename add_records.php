@@ -27,8 +27,16 @@ if($_POST)
         die("Connection failed");
     }
     else {
-        $query = "INSERT INTO back_log (requestor_id, tool_name, type, description, priority, tester, image_name, status, date_filed)
-                    values ('$requestor_id','$tool_name','$type', '$description', '$priority', '$tester', '$image_name', '$status', NOW())";
+        $query = "";
+
+        if($status == "Closed"){
+            $query .= "INSERT INTO back_log (requestor_id, tool_name, type, description, priority, tester, image_name, status, date_filed, date_closed)
+            values ('$requestor_id','$tool_name','$type', '$description', '$priority', '$tester', '$image_name', '$status', NOW(), NOW())";
+        }
+        else{
+            $query .= "INSERT INTO back_log (requestor_id, tool_name, type, description, priority, tester, image_name, status, date_filed)
+            values ('$requestor_id','$tool_name','$type', '$description', '$priority', '$tester', '$image_name', '$status', NOW())";
+        } 
 
         if (!$conn->query($query)){
             echo "Error: ". $conn->errorInfo()[0];

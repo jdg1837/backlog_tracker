@@ -25,25 +25,14 @@ $(document).ready(function() {
         } );
     }
 
-    // Supercedes new entry form submittal to send it to server with AJAX
-    $("#addNewForm").submit(function(e) {
+    // Refresh forms and clear all fields when the modal gets dismissed
+    $('#formModal').on('hidden.bs.modal', function () {
+        $('#entryForm').trigger("reset");
+        $('#imageForm').trigger("reset");
+        $('#image_name').val('');
+    });
 
-        e.preventDefault();
-    
-        $.ajax({
-            type: "POST",
-            url: $(this).attr('action'),
-            data: $(this).serialize(), // serializes the form's elements.
-            success: function(data)
-            {
-                $('#addNewModal').modal('hide');
-                $('#addNewForm').trigger("reset");
-                read_db();
-            }
-        });
-      });
-
-    // Supercedes new entry form submittal to send it to server with AJAX
+    // When form is submitted, the image (if any) gets updated first, then the form data
     $("#submitForm").click(function(){
         var file = $('#file')[0].files[0];
 
@@ -60,46 +49,41 @@ $(document).ready(function() {
                 processData: false,
                 success: function(response){
                     if(response != 0){
-                        $("#img").attr("src",response); 
-                    }else{
-                        alert('file not uploaded');
+                        $('#image_name').val(filename);
+                        update_db();
                     }
                 },
             });
-            
-            $('#image_name').val(filename);
         }
+        else{
+            update_db();
+        }     
+    });
 
+    // Form gets sent to server, for entry addition or editing, depending on formType attr
+    function update_db(){
+        var formType = $('#formType').val();
+        var url = "add_records.php";
+        if (formType == "edit"){
+            url = "edit_records.php"
+        }
         $.ajax({
             type: "POST",
-            url: 'add_records.php',
-            data: $('#addNewForm').serialize(), // serializes the form's elements.
+            url: url,
+            data: $('#entryForm').serialize(), // serializes the form's elements.
             success: function(d)
             {
-                $('#addNewModal').modal('hide');
-                $('#addNewForm').trigger("reset");
+                $('#formModal').modal('hide');
                 read_db();
             }
         });
-      });
+    }
 
-    // Supercedes editing form submittal to send it to server with AJAX
-    $("#editOldForm").submit(function(e) {
-
-        e.preventDefault();
-    
-        $.ajax({
-            type: "POST",
-            url: $(this).attr('action'),
-            data: $(this).serialize(), // serializes the form's elements.
-            success: function(data)
-            {
-                $('#editOldModal').modal('hide');
-                $('#editOldForm').trigger("reset");
-                read_db();
-            }
-        });
-        });
+    // Callback on button to add new item. Sets modal on new entry mode and opens it up
+    $("#addNewModal").click(function(e){
+        $('#formType').val("new");
+        $('#formModal').modal('show');
+    });
 
     // Action upon chosing to update a row: open editing modal prefilled with current values
     $("#trackertable").on('click', '#editlink', function(e){
@@ -119,19 +103,20 @@ $(document).ready(function() {
         var image_name = row_data[11];
         var status = row_data[12];
 
-        $('#id2').val(id);
-        $('#tool_name2').val(tool_name);
-        $('#type2').val(type);
-        $('#description2').val(description);
-        $('#priority2').val(priority);
-        $('#tester2').val(tester);
-        $('#image_name2').val(image_name);
-        $('#status2').val(status);
+        $('#id').val(id);
+        $('#tool_name').val(tool_name);
+        $('#type').val(type);
+        $('#description').val(description);
+        $('#priority').val(priority);
+        $('#tester').val(tester);
+        $('#image_name').val(image_name);
+        $('#status').val(status);
+        $('#formType').val("edit");
 
-        $('#editOldModal').modal('show');
+        $('#formModal').modal('show');
     });
 
-    // Action upon chosing to delete a row: order server to delete entry with that id
+    // Action upon chosing to delete a row: set that row's id as the one to delete, and trigger confirmation modal
     $("#trackertable").on('click', '#deletelink', function(e){
 
         e.stopPropagation();
@@ -141,6 +126,17 @@ $(document).ready(function() {
         var row_data = table.row( $(this).parents('tr') ).data();
 
         var id = row_data[1];
+        $('#deleteid').val(id)
+        $('#deleteModal').modal('show');
+    });
+
+    // When user confirms row deletion, hide the modal and order the delete from the server
+    $("#confirmDelete").click(function(e){
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+
+        var id = $('#deleteid').val();
+        $('#deleteModal').modal('hide');
 
         $.ajax({
             type: "POST",
@@ -150,27 +146,6 @@ $(document).ready(function() {
             {
                 read_db();
             }
-        });
-    });
-
-    $("#but_upload").click(function(){
-        var fd = new FormData();
-        var files = $('#file')[0].files[0];
-        fd.append('file',files);
-
-        $.ajax({
-            url: 'upload_file.php',
-            type: 'post',
-            data: fd,
-            contentType: false,
-            processData: false,
-            success: function(response){
-                if(response != 0){
-                    $("#img").attr("src",response); 
-                }else{
-                    alert('file not uploaded');
-                }
-            },
         });
     });
 } );
