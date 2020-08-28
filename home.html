@@ -5,6 +5,7 @@
     <!-- Load Bootstrap and custom CSS-->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
     <link rel="stylesheet" href="styles.css">
     <title>Backlog</title>
   </head>
@@ -18,7 +19,8 @@
 
     <h1>Backlog Tracker!</h1>
     <h6>You are currently logged in as "<span id="username"></span>". Click <a id="userlink" href="#">here</a> to change users</h6> 
-    
+    </br>
+
     <div id="userModal" class="modal fade" role="dialog">
       <div class="modal-dialog">
           <div class="modal-content">    
@@ -26,7 +28,7 @@
                 <h6>Login</h6>
                 <form method="post" id = "userEnter">
                 <label id="label" for="user"> Username </label>
-                <input type="text" name="username_in" value="" id="username_in">
+                <input type="text" name="username_in" value="" id="username_in" class="form-control">
                 </form>
               </div>
               <div class="modal-footer">
@@ -37,16 +39,24 @@
       </div>
     </div>
 
-    <!-- Button to trigger the modal to add entry -->
-    <button type="button" class="btn btn-primary btn-lg" id="addNewModal">Add New</button>
+    <!-- Header with search, entry-per-page and new entry controllers -->
+    <div class="container-fluid">
+      <div class="row no-gutters">
+      <div class="col-md-2" id="searchBar"></div>
+      <div class="col-md-2" id="showEntries"></div>
+      <div class="col-md-2"><button type="button" class="btn btn-primary btn-lg" id="addNewModal">Add New</button></div>  
+      </div>
+      </div>
+    </div>
 
     <!-- Pop-up Form to Add New Entry-->
     <div id="formModal" class="modal fade" role="dialog">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-dialog-centered modal-md">
             <div class="modal-content">    
                 <div class="modal-body">
                   
                   <form method="post" action="add_records.php" id = "entryForm">
+                    <div class="form-group">
                       <input name="id" id="id" type="hidden" value="">
                       <input name="formType" id="formType" type="hidden" value="entry">
                       <input name="requested_by" id="requested_by" type="hidden" value="John Doe">
@@ -54,7 +64,7 @@
                       <input name="foo" id="foo" type="hidden" value="add">
 
                       <label id="label" for="tool_name"> Tool Name </label> </br>
-                      <select name="tool_name" size="1" id="tool_name">
+                      <select name="tool_name" size="1" id="tool_name" class="form-control">
                       <option value="Test" selected>Test</option>
                       <option value="Budget">Budget</option>
                       <option value="Project">Project</option>
@@ -62,17 +72,19 @@
                       </br>
           
                       <label id="label" for="type"> Type </label> </br>
-                      <select name="type" size="1" id="type">
-                      <option value="Enhancement">Enhancement</option>
+                      <select name="type" size="1" id="type" class="form-control">
+                      <option value="Enhancement" selected>Enhancement</option>
+                      <option value="Correction">Correction</option>
+                      <option value="Prevention">Prevention</option>
                       </select>
                       </br>
           
                       <label id="label" for="description"> Description </label> </br>
-                      <textarea name="description" id="description" style="width:200px; height:100px;" maxlength="500"></textarea>
+                      <textarea name="description" id="description" maxlength="500" class="form-control"></textarea>
                       </br>
           
                       <label id="label" for="priority"> Priority </label> </br>
-                      <select name="priority" size="1" id="priority">
+                      <select name="priority" size="1" id="priority" class="form-control">
                       <option value="Low" selected>Low</option>
                       <option value="Medium">Medium</option>
                       <option value="High">High</option>
@@ -80,26 +92,27 @@
                       </br>
           
                       <label id="label" for="tester"> Tester </label> </br>
-                      <input type="text" name="tester" value="tester" id="tester">
+                      <input type="text" name="tester" value="tester" id="tester" class="form-control">
                       </br>
                       
                       <div class="uploadbox"  id="uploadbox">
                       <input type="file" name="file" id="file" accept="image/*" hidden>
                       <label> Image Name </label> </br>
-                      <input type="text" name="image_name" id="image_name" value="" id="image_name" readonly> </br>
+                      <input type="text" name="image_name" id="image_name" value="" id="image_name" readonly class="form-control"> </br>
                       <span><a id="uploadlink" href="#">Choose and image to upload</a> or drag it here</span>
                       </div>
 
 
 
                       <label id="label" for="status"> Status </label> </br>
-                      <select name="status" size="1" id="status">
+                      <select name="status" size="1" id="status" class="form-control">
                       <option value="New" selected>New</option>
                       <option value="In-Progress">In-Progress</option>
                       <option value="Completed">Completed</option>
                       <option value="Closed">Closed</option>
                       </select>
                       </br>
+                    </div>
                   </form>
                   </br>
                 </div>
@@ -149,6 +162,16 @@
       <tbody>
       </tbody>
     </table>
+
+    <!-- Store HTML code as string. This is used to dynamically create the dropdown action menus for each row -->
+    <script> var dropdown_src = `<div class="dropdown">
+      <button class="btn bg-transparent btn-xs dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-cog"></i></button>
+      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+      <a class="dropdown-item" id="editlink" href="#"><i class="fas fa-pencil-alt"></i> Edit</a>
+      <a class="dropdown-item" id="deletelink" href="#"><i class="fas fa-trash"></i> Delete</a>
+      <div>
+    </div>` 
+    </script>    
 
   </body>
 </html>
