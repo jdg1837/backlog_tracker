@@ -43,6 +43,46 @@ $(document).ready(function() {
         });
       });
 
+    // Supercedes new entry form submittal to send it to server with AJAX
+    $("#submitForm").click(function(){
+        var file = $('#file')[0].files[0];
+
+        if(file != undefined){
+            var image_data = new FormData();
+            image_data.append('file',file);
+            var filename = file['name'];
+
+            $.ajax({
+                url: 'upload_file.php',
+                type: 'post',
+                data: image_data,
+                contentType: false,
+                processData: false,
+                success: function(response){
+                    if(response != 0){
+                        $("#img").attr("src",response); 
+                    }else{
+                        alert('file not uploaded');
+                    }
+                },
+            });
+            
+            $('#image_name').val(filename);
+        }
+
+        $.ajax({
+            type: "POST",
+            url: 'add_records.php',
+            data: $('#addNewForm').serialize(), // serializes the form's elements.
+            success: function(d)
+            {
+                $('#addNewModal').modal('hide');
+                $('#addNewForm').trigger("reset");
+                read_db();
+            }
+        });
+      });
+
     // Supercedes editing form submittal to send it to server with AJAX
     $("#editOldForm").submit(function(e) {
 

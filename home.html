@@ -15,24 +15,24 @@
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script>
-    <script src="js/vendor/jquery.ui.widget.js"></script>
+    <!-- <script src="js/vendor/jquery.ui.widget.js"></script>
     <script src="js/jquery.iframe-transport.js"></script>
-    <script src="js/jquery.fileupload.js"></script>    
+    <script src="js/jquery.fileupload.js"></script>     -->
     <script src="webapp.js"></script>
 
     <h1>Backlog Tracker!</h1>
 
-    <div class="container">
+    <!-- <div class="container">
       <form method="post" action="upload_file.php" enctype="multipart/form-data" id="myform">
           <div >
-              <input type="file" id="file" name="file" />
+              //<input type="file" id="file" name="file" />
               <input type="submit" class="button" value="Upload" id="but_upload">
           </div>
       </form>
-  </div>
+  </div> -->
 
     <!-- Button to trigger the modal to add entry -->
-    <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#addNewModal">Open Modal</button>
+    <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#addNewModal">Add New</button>
 
     <!-- Pop-up Form to Add New Entry-->
     <div id="addNewModal" class="modal fade" role="dialog">
@@ -40,7 +40,6 @@
             <div class="modal-content">    
                 <div class="modal-body">
                   <form method="post" action="add_records.php" id = "addNewForm">
-                    <fieldset>
                       <label id="label" for="tool_name"> Tool Name </label>
                       </br>
 
@@ -73,10 +72,8 @@
                       <input type="text" name="tester" value="tester">
                       </br>
                       
-                      <label id="label" for="image_name"> Image Name </label> </br>
-                      <input type="text" name="image_name" value="">
-                      </br>
-          
+                      <input name="image_name" id="image_name" type="hidden" value="">
+                      
                       <label id="label" for="status"> Status </label> </br>
                       <select name="status" size="1">
                         <option value="New" selected>New</option>
@@ -85,13 +82,15 @@
                         <option value="Closed">Closed</option>
                       </select>
                       </br>
-   
-                    </fieldset>
+                  </form>
+                  </br>
+                  <form method="post" action="upload_file.php" enctype="multipart/form-data" id="myform">
+                      <input type="file" name="file" id="file">
+                  </form>
                 </div>
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                  <input type="submit" name="submit">
-                  </form>
+                  <button type="button" class="btn btn-secondary btn-lg" data-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-primary btn-lg" id="submitForm">Submit</button>
                 </div>
             </div>
         </div>
