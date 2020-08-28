@@ -40,11 +40,14 @@ $(document).ready(function() {
 
     // Reads from db and fills table. Adds button with dropdown options to update and delete
     function read_db(){
+        $('#foo').val("read");
         $('#trackertable').DataTable( {
             "processing": true,
             "bDestroy": true,
+            
             "ajax": {
-                "url": "read_records.php",
+                "data": {"foo": "read"},
+                "url": "server.php",
                 "type": "POST"
             },
             "columnDefs": [ {
@@ -57,8 +60,18 @@ $(document).ready(function() {
                 <a class="dropdown-item" id="deletelink" href="#">Delete</a>
                 <div>
               </div>`
-            } ]
+            },
+            {
+                "targets": 11,
+                "render": function ( data, type, row, meta ) {
+                    return '<a target="_blank" rel="noopener noreferrer" href="'+data+'">'+data+'</a>';
+                  }
+            } 
+            ]
         } );
+        // $('.imglink' span).each(function(i, obj) {
+        //     obj.children()
+        // });
     }
 
     // Refresh forms and clear all fields when the modal gets dismissed
@@ -78,14 +91,17 @@ $(document).ready(function() {
             var filename = file['name'];
 
             $.ajax({
-                url: 'upload_file.php',
+                url: 'server.php',
                 type: 'post',
                 data: image_data,
                 contentType: false,
                 processData: false,
                 success: function(response){
                     if(response != 0){
-                        $('#image_name').val(filename);
+                        $('#image_name').val(response);
+                    }
+                    else{
+                        $('#image_name').val('');
                     }
                     update_db();
                 }
@@ -100,10 +116,7 @@ $(document).ready(function() {
     function update_db(){
         $('#requested_by').val($('#username').text());
         var formType = $('#formType').val();
-        var url = "add_records.php";
-        if (formType == "edit"){
-            url = "edit_records.php"
-        }
+        var url = "server.php"
         $.ajax({
             type: "POST",
             url: url,
@@ -119,6 +132,7 @@ $(document).ready(function() {
     // Callback on button to add new item. Sets modal on new entry mode and opens it up
     $("#addNewModal").click(function(e){
         $('#formType').val("new");
+        $('#foo').val("add");
         $('#formModal').modal('show');
     });
 
@@ -149,6 +163,7 @@ $(document).ready(function() {
         $('#image_name').val(image_name);
         $('#status').val(status);
         $('#formType').val("edit");
+        $('#foo').val("edit");
 
         $('#formModal').modal('show');
     });
@@ -173,12 +188,13 @@ $(document).ready(function() {
         e.stopImmediatePropagation();
 
         var id = $('#deleteid').val();
+        var foo = "del";
         $('#deleteModal').modal('hide');
 
         $.ajax({
             type: "POST",
-            url: "delete_records.php",
-            data: {id: id},
+            url: "server.php",
+            data: {id: id, foo:foo},
             success: function(data)
             {
                 read_db();
