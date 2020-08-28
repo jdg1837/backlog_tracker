@@ -62,12 +62,16 @@ class Server {
 
     function add($requestor_id, $tool_name, $type, $description, $priority, $tester, $image_name, $status){
         if($status == "Closed"){
-            $this->query .= "INSERT INTO back_log (requestor_id, tool_name, type, description, priority, tester, image_name, status, date_filed, date_closed)
-            values ('$requestor_id','$tool_name','$type', '$description', '$priority', '$tester', '$image_name', '$status', NOW(), NOW())";
+            $this->query .= "INSERT INTO back_log (requestor_id, tool_name, type, description, priority, tester, image_name, status, date_filed, date_closed, fix_confirm)
+            values ('$requestor_id','$tool_name','$type', '$description', '$priority', '$tester', '$image_name', '$status', NOW(), NOW(), 1)";
         }
+        elseif($status == "Completed"){
+            $this->query .= "INSERT INTO back_log (requestor_id, tool_name, type, description, priority, tester, image_name, status, date_filed, fix_confirm)
+            values ('$requestor_id','$tool_name','$type', '$description', '$priority', '$tester', '$image_name', '$status', NOW(), 1)";
+        } 
         else{
-            $this->query .= "INSERT INTO back_log (requestor_id, tool_name, type, description, priority, tester, image_name, status, date_filed)
-            values ('$requestor_id','$tool_name','$type', '$description', '$priority', '$tester', '$image_name', '$status', NOW())";
+            $this->query .= "INSERT INTO back_log (requestor_id, tool_name, type, description, priority, tester, image_name, status, date_filed, fix_confirm)
+            values ('$requestor_id','$tool_name','$type', '$description', '$priority', '$tester', '$image_name', '$status', NOW(), 0)";
         } 
 
         $this->connect();
@@ -86,6 +90,13 @@ class Server {
                             WHEN (status != 'Closed') AND ('$status') = 'Closed' THEN NOW()
                             WHEN (status = 'Closed') AND ('$status') != 'Closed' THEN NULL 
                             ELSE  (date_closed)
+                        END ),
+                        fix_confirm = 
+                        ( CASE  
+                            WHEN (status != 'Closed') AND ('$status') = 'Closed' THEN 1
+                            WHEN (status != 'Completed') AND ('$status') = 'Completed' THEN 1
+                            WHEN ((status = 'Closed') OR (status = 'Completed')) AND (('$status') != 'Closed') AND (('$status') != 'Completed') THEN 0
+                            ELSE  (fix_confirm)
                         END ),
                         status = '$status'
                     WHERE id = $id";
@@ -164,6 +175,5 @@ else{
         $sv->upload($filename);
     }
 }
-
 
 ?>

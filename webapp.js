@@ -1,5 +1,6 @@
 $(document).ready(function() {
-    // We load the table whenever the page is loaded, and set user to John Doe
+    // We load the table whenever the page is loaded
+    // set default user to John Doe
     $('#username').text("John Doe");
     read_db();
 
@@ -42,6 +43,17 @@ $(document).ready(function() {
     function read_db(){
         $('#foo').val("read");
         $('#trackertable').DataTable( {
+            initComplete : function() {
+                $('#searchBar').empty();
+                $(".dataTables_filter").detach().appendTo('#searchBar');
+                $('#showEntries').empty();
+                $(".dataTables_length").detach().appendTo('#showEntries');
+            },
+            "dom": "fl<t>ip",
+            "language": {
+                search: "_INPUT_",
+                searchPlaceholder: "Search..."
+            },
             "processing": true,
             "bDestroy": true,
             
@@ -53,13 +65,18 @@ $(document).ready(function() {
             "columnDefs": [ {
                 "targets": 0,
                 "data": null,
-                "defaultContent": `<div class="dropdown">
-                <button class="btn btn-primary btn-xs dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">...</button>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item" id="editlink" href="#">Edit</a>
-                <a class="dropdown-item" id="deletelink" href="#">Delete</a>
-                <div>
-              </div>`
+                "defaultContent": dropdown_src
+            },
+            {
+                "targets": 10,
+                "render": function ( data, type, row, meta ) {
+                    if(data == 1){
+                        return '<a target="_blank">Yes</a>';
+                    }
+                    else{
+                        return '<a target="_blank">No</a>';
+                    }
+                  }
             },
             {
                 "targets": 11,
@@ -69,9 +86,6 @@ $(document).ready(function() {
             } 
             ]
         } );
-        // $('.imglink' span).each(function(i, obj) {
-        //     obj.children()
-        // });
     }
 
     // Refresh forms and clear all fields when the modal gets dismissed

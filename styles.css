@@ -4,26 +4,6 @@ body {
   h1 {
     color: f58025;
   }
-  ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-    background-color: #0064b1;
-  }
-  
-  li {
-    float: left;
-  }
-  
-  li a {
-    display: block;
-    color: white;
-    text-align: left;
-    padding: 16px 20px;
-    text-decoration: none;
-  }
-
 .dropdown-menu
  {
    max-height: 200px;
@@ -38,3 +18,34 @@ body {
   margin-top: 100px; */
   text-align: left;
 }
+
+/* .dataTables_filter {
+  display: none;
+} */
+
+/* .dataTables_filter2 {
+  display: inline-flex;
+} */
+
+.form-group{
+  text-align:center;
+  flex-grow:1
+}
+
+#label {
+  float: left;
+  width: 80px;
+}
+
+#searchBar{
+  float: left;
+  width: 80px;
+}
+
+#addNewModal{
+  float: left;
+}
+
+.dropdown-menu {
+  overflow-y: hidden;
+  }
