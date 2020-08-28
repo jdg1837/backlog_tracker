@@ -2,7 +2,7 @@ $(document).ready(function() {
     // We load the table whenever the page is loaded
     read_db();
     
-    // Reads from db and fills table. Adds options to update and delete
+    // Reads from db and fills table. Adds button with dropdown options to update and delete
     function read_db(){
         $('#trackertable').DataTable( {
             "processing": true,
@@ -25,7 +25,7 @@ $(document).ready(function() {
         } );
     }
 
-    // Supercedes form submittal to send it to server with AJAX
+    // Supercedes new entry form submittal to send it to server with AJAX
     $("#addNewForm").submit(function(e) {
 
         e.preventDefault();
@@ -43,7 +43,7 @@ $(document).ready(function() {
         });
       });
 
-    // Supercedes form submittal to send it to server with AJAX
+    // Supercedes editing form submittal to send it to server with AJAX
     $("#editOldForm").submit(function(e) {
 
         e.preventDefault();
@@ -61,7 +61,7 @@ $(document).ready(function() {
         });
         });
 
-    // Action upon chosing to update a row: open modal prefilled with current values
+    // Action upon chosing to update a row: open editing modal prefilled with current values
     $("#trackertable").on('click', '#editlink', function(e){
 
         e.stopPropagation();
@@ -110,6 +110,27 @@ $(document).ready(function() {
             {
                 read_db();
             }
+        });
+    });
+
+    $("#but_upload").click(function(){
+        var fd = new FormData();
+        var files = $('#file')[0].files[0];
+        fd.append('file',files);
+
+        $.ajax({
+            url: 'upload_file.php',
+            type: 'post',
+            data: fd,
+            contentType: false,
+            processData: false,
+            success: function(response){
+                if(response != 0){
+                    $("#img").attr("src",response); 
+                }else{
+                    alert('file not uploaded');
+                }
+            },
         });
     });
 } );
