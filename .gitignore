@@ -1,4 +1,5 @@
 images/*
+file-upload/*
 *.png
 *.jpg
 *.jpeg

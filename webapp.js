@@ -1,6 +1,21 @@
 $(document).ready(function() {
     // We load the table whenever the page is loaded
+    $('#username').text("John Doe");
     read_db();
+    initialize_up_widget();
+
+    function initialize_up_widget(){
+        var image_loader = $('#fileupload'); //file input 
+        //initialize blueimp fileupload plugin
+        image_loader.fileupload({
+            url: 'upload_file.php',
+            dataType: 'json',
+            autoUpload: false,
+            acceptFileTypes: /(\.|\/)(jpg|jpeg|png)$/i,
+            // maxFileSize: 1048576, //1MB
+            dropZone: $('#dropzone')
+        });
+    }
     
     // Reads from db and fills table. Adds button with dropdown options to update and delete
     function read_db(){
@@ -17,7 +32,7 @@ $(document).ready(function() {
                 "defaultContent": `<div class="dropdown">
                 <button class="btn btn-primary btn-xs dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">...</button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item" id="editlink"" href="#">Edit</a>
+                <a class="dropdown-item" id="editlink" href="#">Edit</a>
                 <a class="dropdown-item" id="deletelink" href="#">Delete</a>
                 <div>
               </div>`
@@ -62,6 +77,7 @@ $(document).ready(function() {
 
     // Form gets sent to server, for entry addition or editing, depending on formType attr
     function update_db(){
+        $('#requested_by').val($('#username').text());
         var formType = $('#formType').val();
         var url = "add_records.php";
         if (formType == "edit"){
@@ -147,5 +163,25 @@ $(document).ready(function() {
                 read_db();
             }
         });
+    });
+
+    // Open log-in modal when prompted
+    $("#userlink").click(function(e){
+
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+
+        $('#userModal').modal('show');
+    });
+
+    // Refresh forms and clear all fields when the modal gets dismissed
+    $('#userModal').on('hidden.bs.modal', function () {
+        $('#userEnter').trigger("reset");
+    });
+
+    $("#submitUser").click(function(){
+        var user = $('#username_in').val();
+        $('#username').text(user);
+        $('#userModal').modal('hide');
     });
 } );

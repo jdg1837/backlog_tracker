@@ -9,27 +9,46 @@
     <title>Backlog</title>
   </head>
   <body>
-
     <!-- Load js libraries -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script>
-    <!-- <script src="js/vendor/jquery.ui.widget.js"></script>
-    <script src="js/jquery.iframe-transport.js"></script>
-    <script src="js/jquery.fileupload.js"></script>     -->
+    <script src="file-upload/js/vendor/jquery.ui.widget.js"></script>
+    <script src="file-upload/js/jquery.iframe-transport.js"></script>
+    <script src="file-upload/js/jquery.fileupload.js"></script>    
     <script src="webapp.js"></script>
 
-    <h1>Backlog Tracker!</h1>
+    <div class="container" >
+      <input type="file" name="file" id="file">
+      
+      <!-- Drag and Drop container-->
+      <div class="upload-area"  id="uploadfile">
+          <h1>Drag and Drop file here<br/>Or<br/>Click to select file</h1>
+      </div>
+  </div>
 
-    <!-- <div class="container">
-      <form method="post" action="upload_file.php" enctype="multipart/form-data" id="myform">
-          <div >
-              //<input type="file" id="file" name="file" />
-              <input type="submit" class="button" value="Upload" id="but_upload">
+    <h1>Backlog Tracker!</h1>
+    <h6>You are currently logged in as "<span id="username"></span>". Click <a id="userlink" href="#">here</a> to change users</h6> 
+    
+    <div id="userModal" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+          <div class="modal-content">    
+              <div class="modal-body">
+                <h6>Login</h6>
+                <form method="post" id = "userEnter">
+                <label id="label" for="user"> Username </label>
+                <input type="text" name="username_in" value="" id="username_in">
+                </form>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-lg" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary btn-lg" id="submitUser">Log-In</button>
+              </div>
           </div>
-      </form>
-  </div> -->
+      </div>
+    </div>
+
 
     <!-- Button to trigger the modal to add entry -->
     <button type="button" class="btn btn-primary btn-lg" id="addNewModal">Add New</button>
@@ -42,6 +61,7 @@
                   <form method="post" action="add_records.php" id = "entryForm">
                       <input name="id" id="id" type="hidden" value="">
                       <input name="formType" id="formType" type="hidden" value="entry">
+                      <input name="requested_by" id="requested_by" type="hidden" value="John Doe">
 
                       <label id="label" for="tool_name"> Tool Name </label> </br>
                       <select name="tool_name" size="1" id="tool_name">

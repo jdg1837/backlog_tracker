@@ -10,7 +10,7 @@ if($_POST)
     $tester = $_POST['tester'];
     $image_name = $_POST['image_name'];
     $status = $_POST['status'];
-    $requestor_id = "John Doe";
+    $requestor_id = $_POST['requested_by'];
 
     // Databse metadata
     $host = "localhost";
